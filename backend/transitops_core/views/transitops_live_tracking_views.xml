@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_transitops_live_tracking_map" model="ir.actions.client">
+        <field name="name">Live Tracking</field>
+        <field name="tag">transitops_live_tracking_map</field>
+        <field name="target">current</field>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher'), ref('transitops_core.group_transitops_fleet_manager'), ref('transitops_core.group_transitops_maintenance_manager')])]"/>
+    </record>
+</odoo>

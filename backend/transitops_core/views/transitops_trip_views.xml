@@ -57,6 +57,11 @@
                         <group>
                             <field name="current_stop_id" domain="[('route_id', '=', route_id)]"/>
                             <field name="active"/>
+                            <field name="latitude" readonly="1"/>
+                            <field name="longitude" readonly="1"/>
+                            <field name="live_speed" readonly="1"/>
+                            <field name="live_heading" readonly="1"/>
+                            <field name="live_last_updated" readonly="1"/>
                         </group>
                         <group>
                             <field name="distance_covered"/>

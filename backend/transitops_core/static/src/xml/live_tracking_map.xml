@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="transitops_core.LiveTrackingMap">
+        <div class="o_transitops_live_tracking o_view_controller">
+            <div class="o_transitops_live_tracking_header">
+                <div>
+                    <h1>Live Vehicle Tracking</h1>
+                    <p>OpenStreetMap-powered fleet visibility with auto-refresh.</p>
+                </div>
+                <div class="o_transitops_live_tracking_legend">
+                    <span><i class="legend-dot available"></i>Available</span>
+                    <span><i class="legend-dot on-trip"></i>On Trip</span>
+                    <span><i class="legend-dot maintenance"></i>Maintenance</span>
+                </div>
+            </div>
+            <div class="o_transitops_live_tracking_body">
+                <div class="o_transitops_live_tracking_map" t-ref="map"></div>
+                <aside class="o_transitops_live_tracking_sidebar">
+                    <div class="sidebar-card">
+                        <h3>Tracked Vehicles</h3>
+                        <t t-if="state.loaded">
+                            <t t-foreach="state.vehicles" t-as="vehicle" t-key="vehicle.id">
+                                <div class="vehicle-card">
+                                    <strong><t t-esc="vehicle.vehicle_number"/></strong>
+                                    <div><t t-esc="vehicle.availability"/> · <t t-esc="vehicle.maintenance_status"/></div>
+                                    <div><t t-esc="vehicle.latitude"/>, <t t-esc="vehicle.longitude"/></div>
+                                </div>
+                            </t>
+                        </t>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </t>
+</templates>

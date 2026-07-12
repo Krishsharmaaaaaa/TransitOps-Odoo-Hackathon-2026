@@ -51,6 +51,11 @@ class TransitOpsFleetVehicle(models.Model):
         tracking=True,
     )
     current_location = fields.Char(tracking=True)
+    latitude = fields.Float(tracking=True)
+    longitude = fields.Float(tracking=True)
+    live_speed = fields.Float(tracking=True)
+    live_heading = fields.Float(tracking=True)
+    live_last_updated = fields.Datetime(tracking=True)
     registration_expiry = fields.Date(tracking=True)
     insurance_expiry = fields.Date(tracking=True)
     assigned_driver_id = fields.Many2one(
@@ -111,6 +116,14 @@ class TransitOpsFleetVehicle(models.Model):
                 raise ValidationError('Vehicle capacity must be greater than zero.')
             if record.odometer < 0:
                 raise ValidationError('Odometer reading cannot be negative.')
+            if record.latitude and not (-90.0 <= record.latitude <= 90.0):
+                raise ValidationError('Latitude must be between -90 and 90.')
+            if record.longitude and not (-180.0 <= record.longitude <= 180.0):
+                raise ValidationError('Longitude must be between -180 and 180.')
+            if record.live_speed < 0:
+                raise ValidationError('Live speed cannot be negative.')
+            if record.live_heading and not (0.0 <= record.live_heading <= 360.0):
+                raise ValidationError('Live heading must be between 0 and 360 degrees.')
 
     @api.constrains('availability', 'status', 'maintenance_status', 'assigned_driver_id')
     def _check_operational_consistency(self):
@@ -260,3 +273,15 @@ class TransitOpsFleetVehicle(models.Model):
             'domain': [('source_model', '=', self._name), ('source_res_id', '=', self.id)],
             'context': {'default_source_model': self._name, 'default_source_res_id': self.id},
         }
+
+    @api.model
+    def _update_live_tracking(self, vehicle, latitude, longitude, speed=0.0, heading=0.0, updated_at=False):
+        values = {
+            'latitude': latitude,
+            'longitude': longitude,
+            'live_speed': speed,
+            'live_heading': heading,
+            'live_last_updated': updated_at or fields.Datetime.now(),
+        }
+        vehicle.write(values)
+        return vehicle

@@ -57,6 +57,11 @@
                     </group>
                     <group>
                         <field name="current_location"/>
+                        <field name="latitude"/>
+                        <field name="longitude"/>
+                        <field name="live_speed"/>
+                        <field name="live_heading"/>
+                        <field name="live_last_updated"/>
                             <field name="registration_expiry"/>
                             <field name="insurance_expiry"/>
                         <field name="maintenance_health_score" readonly="1"/>

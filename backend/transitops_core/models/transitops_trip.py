@@ -32,6 +32,11 @@ class TransitOpsTrip(models.Model):
         tracking=True,
         ondelete='restrict',
     )
+    latitude = fields.Float(related='assigned_vehicle_id.latitude', store=True, readonly=True)
+    longitude = fields.Float(related='assigned_vehicle_id.longitude', store=True, readonly=True)
+    live_speed = fields.Float(related='assigned_vehicle_id.live_speed', store=True, readonly=True)
+    live_heading = fields.Float(related='assigned_vehicle_id.live_heading', store=True, readonly=True)
+    live_last_updated = fields.Datetime(related='assigned_vehicle_id.live_last_updated', store=True, readonly=True)
     trip_date = fields.Date(required=True, tracking=True)
     start_time = fields.Datetime(required=True, tracking=True)
     end_time = fields.Datetime(tracking=True)
