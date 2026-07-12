@@ -174,5 +174,6 @@
         <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
         <field name="search_view_id" ref="view_transitops_incident_search"/>
         <field name="context">{'search_default_reported': 1}</field>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher'), ref('transitops_core.group_transitops_fleet_manager'), ref('transitops_core.group_transitops_maintenance_manager'), ref('transitops_core.group_transitops_driver')])]"/>
     </record>
 </odoo>

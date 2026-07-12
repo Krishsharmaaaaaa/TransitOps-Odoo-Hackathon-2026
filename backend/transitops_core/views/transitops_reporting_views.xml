@@ -66,6 +66,7 @@
         <field name="res_model">transitops.fleet.vehicle</field>
         <field name="view_mode">tree,graph,pivot,form</field>
         <field name="search_view_id" ref="view_transitops_fleet_report_search"/>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher'), ref('transitops_core.group_transitops_fleet_manager'), ref('transitops_core.group_transitops_maintenance_manager')])]"/>
     </record>
 
     <record id="view_transitops_driver_report_tree" model="ir.ui.view">
@@ -132,6 +133,7 @@
         <field name="res_model">transitops.driver</field>
         <field name="view_mode">tree,graph,pivot,form</field>
         <field name="search_view_id" ref="view_transitops_driver_report_search"/>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher'), ref('transitops_core.group_transitops_fleet_manager'), ref('transitops_core.group_transitops_maintenance_manager')])]"/>
     </record>
 
     <record id="view_transitops_trip_report_tree" model="ir.ui.view">
@@ -218,6 +220,7 @@
         <field name="res_model">transitops.trip</field>
         <field name="view_mode">tree,graph,pivot,calendar,form</field>
         <field name="search_view_id" ref="view_transitops_trip_report_search"/>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher'), ref('transitops_core.group_transitops_fleet_manager'), ref('transitops_core.group_transitops_maintenance_manager')])]"/>
     </record>
 
     <record id="view_transitops_incident_report_tree" model="ir.ui.view">
@@ -299,6 +302,7 @@
         <field name="res_model">transitops.incident</field>
         <field name="view_mode">tree,graph,pivot,calendar,form</field>
         <field name="search_view_id" ref="view_transitops_incident_report_search"/>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher'), ref('transitops_core.group_transitops_fleet_manager'), ref('transitops_core.group_transitops_maintenance_manager')])]"/>
     </record>
 
     <record id="view_transitops_maintenance_report_tree" model="ir.ui.view">
@@ -383,6 +387,7 @@
         <field name="res_model">transitops.maintenance</field>
         <field name="view_mode">tree,graph,pivot,calendar,form</field>
         <field name="search_view_id" ref="view_transitops_maintenance_report_search"/>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher'), ref('transitops_core.group_transitops_fleet_manager'), ref('transitops_core.group_transitops_maintenance_manager')])]"/>
     </record>
 
     <record id="action_transitops_reporting_hub" model="ir.actions.act_window">
@@ -391,5 +396,6 @@
         <field name="view_mode">graph,pivot,tree,form</field>
         <field name="domain">[]</field>
         <field name="context">{'search_default_group_metric_group': 1}</field>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher'), ref('transitops_core.group_transitops_fleet_manager'), ref('transitops_core.group_transitops_maintenance_manager')])]"/>
     </record>
 </odoo>

@@ -34,6 +34,7 @@
                             <field name="employee_id"/>
                             <field name="phone"/>
                             <field name="email"/>
+                            <field name="user_id" groups="transitops_core.group_transitops_administrator,transitops_core.group_transitops_transport_manager,transitops_core.group_transitops_fleet_manager"/>
                             <field name="license_number"/>
                             <field name="license_expiry"/>
                         </group>
@@ -114,5 +115,6 @@
         <field name="res_model">transitops.driver</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="search_view_id" ref="view_transitops_driver_search"/>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_fleet_manager'), ref('transitops_core.group_transitops_driver')])]"/>
     </record>
 </odoo>

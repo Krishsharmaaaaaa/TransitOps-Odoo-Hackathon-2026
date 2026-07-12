@@ -138,6 +138,7 @@
         <field name="res_model">transitops.trip</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="search_view_id" ref="view_transitops_trip_search"/>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher'), ref('transitops_core.group_transitops_driver')])]"/>
     </record>
 
     <record id="action_transitops_dispatch_board" model="ir.actions.act_window">
@@ -146,5 +147,6 @@
         <field name="view_mode">tree,kanban,form</field>
         <field name="domain">[('current_status', 'in', ('scheduled', 'in_progress', 'delayed'))]</field>
         <field name="search_view_id" ref="view_transitops_trip_search"/>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher')])]"/>
     </record>
 </odoo>

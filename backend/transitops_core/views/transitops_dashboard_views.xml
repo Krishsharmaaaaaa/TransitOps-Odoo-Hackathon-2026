@@ -18,12 +18,12 @@
         <field name="arch" type="xml">
             <form string="TransitOps Executive Dashboard">
                 <header>
-                    <button name="action_refresh_dashboard" type="object" string="Refresh KPIs" class="btn-primary"/>
-                    <button name="action_open_metric_lines" type="object" string="Metrics"/>
-                    <button name="action_open_metric_graph" type="object" string="Graph"/>
-                    <button name="action_open_metric_pivot" type="object" string="Pivot"/>
-                    <button name="%(action_transitops_notification_history)d" type="action" string="Notifications" class="btn-secondary"/>
-                    <button name="%(action_transitops_reporting_hub)d" type="action" string="Reports" class="btn-secondary"/>
+                    <button name="action_refresh_dashboard" type="object" string="Refresh KPIs" class="btn-primary" groups="transitops_core.group_transitops_administrator,transitops_core.group_transitops_transport_manager"/>
+                    <button name="action_open_metric_lines" type="object" string="Metrics" groups="transitops_core.group_transitops_administrator,transitops_core.group_transitops_transport_manager,transitops_core.group_transitops_dispatcher,transitops_core.group_transitops_fleet_manager,transitops_core.group_transitops_maintenance_manager"/>
+                    <button name="action_open_metric_graph" type="object" string="Graph" groups="transitops_core.group_transitops_administrator,transitops_core.group_transitops_transport_manager,transitops_core.group_transitops_dispatcher,transitops_core.group_transitops_fleet_manager,transitops_core.group_transitops_maintenance_manager"/>
+                    <button name="action_open_metric_pivot" type="object" string="Pivot" groups="transitops_core.group_transitops_administrator,transitops_core.group_transitops_transport_manager,transitops_core.group_transitops_dispatcher,transitops_core.group_transitops_fleet_manager,transitops_core.group_transitops_maintenance_manager"/>
+                    <button name="%(action_transitops_notification_history)d" type="action" string="Notifications" class="btn-secondary" groups="transitops_core.group_transitops_administrator,transitops_core.group_transitops_transport_manager,transitops_core.group_transitops_dispatcher,transitops_core.group_transitops_fleet_manager,transitops_core.group_transitops_maintenance_manager,transitops_core.group_transitops_driver"/>
+                    <button name="%(action_transitops_reporting_hub)d" type="action" string="Reports" class="btn-secondary" groups="transitops_core.group_transitops_administrator,transitops_core.group_transitops_transport_manager,transitops_core.group_transitops_dispatcher,transitops_core.group_transitops_fleet_manager,transitops_core.group_transitops_maintenance_manager"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -98,5 +98,6 @@
         <field name="res_id" ref="transitops_dashboard_main"/>
         <field name="view_mode">form</field>
         <field name="search_view_id" ref="view_transitops_dashboard_search"/>
+        <field name="groups_id" eval="[(6, 0, [ref('transitops_core.group_transitops_administrator'), ref('transitops_core.group_transitops_transport_manager'), ref('transitops_core.group_transitops_dispatcher'), ref('transitops_core.group_transitops_fleet_manager'), ref('transitops_core.group_transitops_maintenance_manager')])]"/>
     </record>
 </odoo>

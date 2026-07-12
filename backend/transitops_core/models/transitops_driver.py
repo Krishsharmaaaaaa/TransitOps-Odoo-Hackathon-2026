@@ -13,6 +13,7 @@ class TransitOpsDriver(models.Model):
     name = fields.Char(required=True, tracking=True)
     phone = fields.Char(required=True, tracking=True)
     email = fields.Char(tracking=True)
+    user_id = fields.Many2one('res.users', string='Related User', tracking=True, ondelete='set null')
     license_number = fields.Char(required=True, tracking=True)
     license_expiry = fields.Date(required=True, tracking=True)
     experience = fields.Integer(required=True, default=0, tracking=True)
