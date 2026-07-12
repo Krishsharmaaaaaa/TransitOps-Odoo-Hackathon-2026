@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_transitops_fleet_report_tree" model="ir.ui.view">
+        <field name="name">transitops.fleet.report.tree</field>
+        <field name="model">transitops.fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <tree string="Fleet Reports" export_xlsx="1">
+                <field name="vehicle_number"/>
+                <field name="vehicle_type"/>
+                <field name="capacity"/>
+                <field name="availability"/>
+                <field name="maintenance_status"/>
+                <field name="maintenance_health_score"/>
+                <field name="next_maintenance_date"/>
+                <field name="assigned_driver_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_fleet_report_search" model="ir.ui.view">
+        <field name="name">transitops.fleet.report.search</field>
+        <field name="model">transitops.fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <search string="Fleet Reports">
+                <field name="vehicle_number"/>
+                <field name="vehicle_type"/>
+                <field name="availability"/>
+                <field name="maintenance_status"/>
+                <filter string="Available" name="available" domain="[('availability', '=', 'available')]"/>
+                <filter string="On Trip" name="on_trip" domain="[('availability', '=', 'on_trip')]"/>
+                <filter string="Maintenance" name="maintenance" domain="[('availability', '=', 'maintenance')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Vehicle Type" name="group_vehicle_type" context="{'group_by': 'vehicle_type'}"/>
+                    <filter string="Availability" name="group_availability" context="{'group_by': 'availability'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'maintenance_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_transitops_fleet_report_graph" model="ir.ui.view">
+        <field name="name">transitops.fleet.report.graph</field>
+        <field name="model">transitops.fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <graph string="Vehicle Utilization" type="bar">
+                <field name="availability" type="row"/>
+                <field name="capacity" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_transitops_fleet_report_pivot" model="ir.ui.view">
+        <field name="name">transitops.fleet.report.pivot</field>
+        <field name="model">transitops.fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <pivot string="Fleet Utilization Pivot">
+                <field name="vehicle_type" type="row"/>
+                <field name="availability" type="col"/>
+                <field name="capacity" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_transitops_fleet_report" model="ir.actions.act_window">
+        <field name="name">Fleet Reports</field>
+        <field name="res_model">transitops.fleet.vehicle</field>
+        <field name="view_mode">tree,graph,pivot,form</field>
+        <field name="search_view_id" ref="view_transitops_fleet_report_search"/>
+    </record>
+
+    <record id="view_transitops_driver_report_tree" model="ir.ui.view">
+        <field name="name">transitops.driver.report.tree</field>
+        <field name="model">transitops.driver</field>
+        <field name="arch" type="xml">
+            <tree string="Driver Reports" export_xlsx="1">
+                <field name="employee_id"/>
+                <field name="name"/>
+                <field name="availability"/>
+                <field name="status"/>
+                <field name="assigned_vehicle_id"/>
+                <field name="license_expiry"/>
+                <field name="experience"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_driver_report_search" model="ir.ui.view">
+        <field name="name">transitops.driver.report.search</field>
+        <field name="model">transitops.driver</field>
+        <field name="arch" type="xml">
+            <search string="Driver Reports">
+                <field name="employee_id"/>
+                <field name="name"/>
+                <field name="availability"/>
+                <field name="status"/>
+                <filter string="Available" name="available" domain="[('availability', '=', 'available')]"/>
+                <filter string="On Trip" name="on_trip" domain="[('availability', '=', 'on_trip')]"/>
+                <filter string="Active" name="active" domain="[('status', '=', 'active')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Availability" name="group_availability" context="{'group_by': 'availability'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_transitops_driver_report_graph" model="ir.ui.view">
+        <field name="name">transitops.driver.report.graph</field>
+        <field name="model">transitops.driver</field>
+        <field name="arch" type="xml">
+            <graph string="Driver Utilization" type="bar">
+                <field name="availability" type="row"/>
+                <field name="experience" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_transitops_driver_report_pivot" model="ir.ui.view">
+        <field name="name">transitops.driver.report.pivot</field>
+        <field name="model">transitops.driver</field>
+        <field name="arch" type="xml">
+            <pivot string="Driver Utilization Pivot">
+                <field name="status" type="row"/>
+                <field name="availability" type="col"/>
+                <field name="experience" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_transitops_driver_report" model="ir.actions.act_window">
+        <field name="name">Driver Reports</field>
+        <field name="res_model">transitops.driver</field>
+        <field name="view_mode">tree,graph,pivot,form</field>
+        <field name="search_view_id" ref="view_transitops_driver_report_search"/>
+    </record>
+
+    <record id="view_transitops_trip_report_tree" model="ir.ui.view">
+        <field name="name">transitops.trip.report.tree</field>
+        <field name="model">transitops.trip</field>
+        <field name="arch" type="xml">
+            <tree string="Trip Reports" export_xlsx="1">
+                <field name="trip_id"/>
+                <field name="trip_name"/>
+                <field name="trip_date"/>
+                <field name="route_id"/>
+                <field name="assigned_vehicle_id"/>
+                <field name="assigned_driver_id"/>
+                <field name="current_status"/>
+                <field name="distance_covered"/>
+                <field name="total_distance"/>
+                <field name="delay_minutes"/>
+                <field name="passenger_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_trip_report_search" model="ir.ui.view">
+        <field name="name">transitops.trip.report.search</field>
+        <field name="model">transitops.trip</field>
+        <field name="arch" type="xml">
+            <search string="Trip Reports">
+                <field name="trip_id"/>
+                <field name="trip_name"/>
+                <field name="route_id"/>
+                <field name="current_status"/>
+                <field name="trip_date"/>
+                <filter string="Scheduled" name="scheduled" domain="[('current_status', '=', 'scheduled')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('current_status', '=', 'in_progress')]"/>
+                <filter string="Completed" name="completed" domain="[('current_status', '=', 'completed')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('current_status', '=', 'cancelled')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status" context="{'group_by': 'current_status'}"/>
+                    <filter string="Route" name="group_route" context="{'group_by': 'route_id'}"/>
+                    <filter string="Month" name="group_month" context="{'group_by': 'trip_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_transitops_trip_report_calendar" model="ir.ui.view">
+        <field name="name">transitops.trip.report.calendar</field>
+        <field name="model">transitops.trip</field>
+        <field name="arch" type="xml">
+            <calendar string="Trip Calendar" date_start="trip_date" color="current_status">
+                <field name="trip_name"/>
+                <field name="route_id"/>
+                <field name="assigned_vehicle_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_transitops_trip_report_graph" model="ir.ui.view">
+        <field name="name">transitops.trip.report.graph</field>
+        <field name="model">transitops.trip</field>
+        <field name="arch" type="xml">
+            <graph string="Trip Completion Rate" type="bar">
+                <field name="trip_date" type="row" interval="month"/>
+                <field name="current_status" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_transitops_trip_report_pivot" model="ir.ui.view">
+        <field name="name">transitops.trip.report.pivot</field>
+        <field name="model">transitops.trip</field>
+        <field name="arch" type="xml">
+            <pivot string="Trip Performance Pivot">
+                <field name="route_id" type="row"/>
+                <field name="current_status" type="col"/>
+                <field name="distance_covered" type="measure"/>
+                <field name="delay_minutes" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_transitops_trip_report" model="ir.actions.act_window">
+        <field name="name">Trip Reports</field>
+        <field name="res_model">transitops.trip</field>
+        <field name="view_mode">tree,graph,pivot,calendar,form</field>
+        <field name="search_view_id" ref="view_transitops_trip_report_search"/>
+    </record>
+
+    <record id="view_transitops_incident_report_tree" model="ir.ui.view">
+        <field name="name">transitops.incident.report.tree</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <tree string="Incident Reports" export_xlsx="1">
+                <field name="incident_number"/>
+                <field name="date"/>
+                <field name="category"/>
+                <field name="severity"/>
+                <field name="status"/>
+                <field name="vehicle_id"/>
+                <field name="trip_id"/>
+                <field name="cost"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_incident_report_search" model="ir.ui.view">
+        <field name="name">transitops.incident.report.search</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <search string="Incident Reports">
+                <field name="incident_number"/>
+                <field name="category"/>
+                <field name="severity"/>
+                <field name="status"/>
+                <field name="date"/>
+                <filter string="Open" name="open" domain="[('status', 'in', ('draft', 'reported', 'investigating'))]"/>
+                <filter string="Resolved" name="resolved" domain="[('status', '=', 'resolved')]"/>
+                <filter string="Closed" name="closed" domain="[('status', '=', 'closed')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_category" context="{'group_by': 'category'}"/>
+                    <filter string="Severity" name="group_severity" context="{'group_by': 'severity'}"/>
+                    <filter string="Month" name="group_month" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_transitops_incident_report_calendar" model="ir.ui.view">
+        <field name="name">transitops.incident.report.calendar</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <calendar string="Incident Calendar" date_start="date" color="severity">
+                <field name="incident_number"/>
+                <field name="category"/>
+                <field name="vehicle_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_transitops_incident_report_graph" model="ir.ui.view">
+        <field name="name">transitops.incident.report.graph</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <graph string="Incident Analysis" type="bar">
+                <field name="date" type="row" interval="month"/>
+                <field name="severity" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_transitops_incident_report_pivot" model="ir.ui.view">
+        <field name="name">transitops.incident.report.pivot</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <pivot string="Incident Analysis Pivot">
+                <field name="category" type="row"/>
+                <field name="severity" type="col"/>
+                <field name="cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_transitops_incident_report" model="ir.actions.act_window">
+        <field name="name">Incident Reports</field>
+        <field name="res_model">transitops.incident</field>
+        <field name="view_mode">tree,graph,pivot,calendar,form</field>
+        <field name="search_view_id" ref="view_transitops_incident_report_search"/>
+    </record>
+
+    <record id="view_transitops_maintenance_report_tree" model="ir.ui.view">
+        <field name="name">transitops.maintenance.report.tree</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <tree string="Maintenance Reports" export_xlsx="1">
+                <field name="maintenance_id"/>
+                <field name="service_date"/>
+                <field name="maintenance_type"/>
+                <field name="status"/>
+                <field name="vehicle_id"/>
+                <field name="estimated_cost"/>
+                <field name="actual_cost"/>
+                <field name="vehicle_health_score"/>
+                <field name="next_due_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_maintenance_report_search" model="ir.ui.view">
+        <field name="name">transitops.maintenance.report.search</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <search string="Maintenance Reports">
+                <field name="maintenance_id"/>
+                <field name="vehicle_id"/>
+                <field name="maintenance_type"/>
+                <field name="status"/>
+                <field name="service_date"/>
+                <filter string="Scheduled" name="scheduled" domain="[('status', '=', 'scheduled')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('status', '=', 'in_progress')]"/>
+                <filter string="Completed" name="completed" domain="[('status', '=', 'completed')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('status', '=', 'cancelled')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Maintenance Type" name="group_type" context="{'group_by': 'maintenance_type'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Month" name="group_month" context="{'group_by': 'service_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_transitops_maintenance_report_calendar" model="ir.ui.view">
+        <field name="name">transitops.maintenance.report.calendar</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <calendar string="Maintenance Calendar" date_start="service_date" color="status">
+                <field name="maintenance_id"/>
+                <field name="vehicle_id"/>
+                <field name="maintenance_type"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_transitops_maintenance_report_graph" model="ir.ui.view">
+        <field name="name">transitops.maintenance.report.graph</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <graph string="Maintenance Cost Analysis" type="bar">
+                <field name="service_date" type="row" interval="month"/>
+                <field name="maintenance_type" type="col"/>
+                <field name="actual_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_transitops_maintenance_report_pivot" model="ir.ui.view">
+        <field name="name">transitops.maintenance.report.pivot</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <pivot string="Maintenance Cost Pivot">
+                <field name="maintenance_type" type="row"/>
+                <field name="status" type="col"/>
+                <field name="actual_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_transitops_maintenance_report" model="ir.actions.act_window">
+        <field name="name">Maintenance Reports</field>
+        <field name="res_model">transitops.maintenance</field>
+        <field name="view_mode">tree,graph,pivot,calendar,form</field>
+        <field name="search_view_id" ref="view_transitops_maintenance_report_search"/>
+    </record>
+
+    <record id="action_transitops_reporting_hub" model="ir.actions.act_window">
+        <field name="name">Reporting Hub</field>
+        <field name="res_model">transitops.dashboard.metric</field>
+        <field name="view_mode">graph,pivot,tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_group_metric_group': 1}</field>
+    </record>
+</odoo>

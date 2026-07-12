@@ -9,6 +9,13 @@
     <menuitem id="menu_transitops_trips" name="Trips" parent="menu_transitops_operations" action="action_transitops_trip" sequence="18"/>
     <menuitem id="menu_transitops_incidents" name="Incidents" parent="menu_transitops_operations" action="action_transitops_incident" sequence="19"/>
     <menuitem id="menu_transitops_maintenance" name="Maintenance" parent="menu_transitops_operations" action="action_transitops_maintenance" sequence="20"/>
+    <menuitem id="menu_transitops_reporting" name="Reporting" parent="menu_transitops_operations" sequence="25"/>
+    <menuitem id="menu_transitops_reporting_hub" name="Reporting Hub" parent="menu_transitops_reporting" action="action_transitops_reporting_hub" sequence="5"/>
+    <menuitem id="menu_transitops_reporting_fleet" name="Fleet Reports" parent="menu_transitops_reporting" action="action_transitops_fleet_report" sequence="10"/>
+    <menuitem id="menu_transitops_reporting_driver" name="Driver Reports" parent="menu_transitops_reporting" action="action_transitops_driver_report" sequence="15"/>
+    <menuitem id="menu_transitops_reporting_trip" name="Trip Reports" parent="menu_transitops_reporting" action="action_transitops_trip_report" sequence="20"/>
+    <menuitem id="menu_transitops_reporting_incident" name="Incident Reports" parent="menu_transitops_reporting" action="action_transitops_incident_report" sequence="25"/>
+    <menuitem id="menu_transitops_reporting_maintenance" name="Maintenance Reports" parent="menu_transitops_reporting" action="action_transitops_maintenance_report" sequence="30"/>
     <menuitem id="menu_transitops_fleet" name="Fleet" parent="menu_transitops_operations" sequence="20"/>
     <menuitem id="menu_transitops_fleet_vehicles" name="Vehicles" parent="menu_transitops_fleet" action="action_transitops_fleet_vehicle" sequence="10"/>
     <menuitem id="menu_transitops_fleet_drivers" name="Drivers" parent="menu_transitops_fleet" action="action_transitops_driver" sequence="20"/>

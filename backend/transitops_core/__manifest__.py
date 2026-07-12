@@ -27,6 +27,7 @@ dispatch coordination, route planning, trip execution, and operational visibilit
         'views/transitops_incident_views.xml',
         'views/transitops_maintenance_views.xml',
         'views/transitops_dashboard_metric_views.xml',
+        'views/transitops_reporting_views.xml',
         'views/transitops_dashboard_views.xml',
         'views/transitops_menus.xml',
     ],
