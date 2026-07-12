@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_transitops_root" name="TransitOps" sequence="10"/>
+    <menuitem id="menu_transitops_operations" name="Operations" parent="menu_transitops_root" sequence="10"/>
+    <menuitem id="menu_transitops_routes" name="Routes" parent="menu_transitops_operations" sequence="15"/>
+    <menuitem id="menu_transitops_route_management" name="Routes" parent="menu_transitops_routes" action="action_transitops_route" sequence="10"/>
+    <menuitem id="menu_transitops_stops" name="Stops" parent="menu_transitops_routes" action="action_transitops_stop" sequence="20"/>
+    <menuitem id="menu_transitops_dispatch" name="Dispatch" parent="menu_transitops_operations" action="action_transitops_dispatch_board" sequence="18"/>
+    <menuitem id="menu_transitops_trips" name="Trips" parent="menu_transitops_operations" action="action_transitops_trip" sequence="18"/>
+    <menuitem id="menu_transitops_fleet" name="Fleet" parent="menu_transitops_operations" sequence="20"/>
+    <menuitem id="menu_transitops_fleet_vehicles" name="Vehicles" parent="menu_transitops_fleet" action="action_transitops_fleet_vehicle" sequence="10"/>
+    <menuitem id="menu_transitops_fleet_drivers" name="Drivers" parent="menu_transitops_fleet" action="action_transitops_driver" sequence="20"/>
+    <menuitem id="menu_transitops_dashboard" name="Dashboard" parent="menu_transitops_operations" action="action_transitops_dashboard" sequence="30"/>
+</odoo>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_transitops_fleet_vehicle_tree" model="ir.ui.view">
+        <field name="name">transitops.fleet.vehicle.tree</field>
+        <field name="model">transitops.fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <tree string="Fleet Vehicles" decoration-success="availability == 'available'" decoration-warning="maintenance_status in ('due', 'in_service')" decoration-danger="availability == 'unavailable' or status == 'retired'">
+                <field name="vehicle_number"/>
+                <field name="vehicle_type"/>
+                <field name="capacity"/>
+                <field name="fuel_type"/>
+                <field name="status"/>
+                <field name="availability"/>
+                <field name="maintenance_status"/>
+                <field name="assigned_driver_id"/>
+                <field name="current_location"/>
+                <field name="odometer"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_fleet_vehicle_form" model="ir.ui.view">
+        <field name="name">transitops.fleet.vehicle.form</field>
+        <field name="model">transitops.fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <form string="Fleet Vehicle">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="vehicle_number" placeholder="Vehicle Number"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="vehicle_type"/>
+                            <field name="fuel_type"/>
+                            <field name="capacity"/>
+                            <field name="odometer"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                            <field name="availability"/>
+                            <field name="maintenance_status"/>
+                            <field name="assigned_driver_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="current_location"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_transitops_fleet_vehicle_kanban" model="ir.ui.view">
+        <field name="name">transitops.fleet.vehicle.kanban</field>
+        <field name="model">transitops.fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="vehicle_number"/>
+                <field name="vehicle_type"/>
+                <field name="status"/>
+                <field name="availability"/>
+                <field name="maintenance_status"/>
+                <field name="current_location"/>
+                <field name="assigned_driver_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record">
+                            <div class="o_kanban_details">
+                                <strong><field name="vehicle_number"/></strong>
+                                <div><field name="vehicle_type"/></div>
+                                <div><field name="assigned_driver_id"/></div>
+                                <div><field name="current_location"/></div>
+                                <div>
+                                    <field name="availability"/>
+                                    <span> · </span>
+                                    <field name="maintenance_status"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_transitops_fleet_vehicle_search" model="ir.ui.view">
+        <field name="name">transitops.fleet.vehicle.search</field>
+        <field name="model">transitops.fleet.vehicle</field>
+        <field name="arch" type="xml">
+            <search string="Search Vehicles">
+                <field name="vehicle_number"/>
+                <field name="vehicle_type"/>
+                <field name="fuel_type"/>
+                <field name="status"/>
+                <field name="availability"/>
+                <field name="maintenance_status"/>
+                <field name="assigned_driver_id"/>
+                <filter string="Available" name="available" domain="[('availability', '=', 'available')]"/>
+                <filter string="Assigned" name="assigned" domain="[('availability', '=', 'assigned')]"/>
+                <filter string="In Transit" name="in_transit" domain="[('availability', '=', 'in_transit')]"/>
+                <filter string="In Maintenance" name="maintenance" domain="[('availability', '=', 'maintenance')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Vehicle Type" name="group_vehicle_type" context="{'group_by': 'vehicle_type'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Availability" name="group_availability" context="{'group_by': 'availability'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_transitops_fleet_vehicle" model="ir.actions.act_window">
+        <field name="name">Vehicles</field>
+        <field name="res_model">transitops.fleet.vehicle</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_transitops_fleet_vehicle_search"/>
+    </record>
+</odoo>

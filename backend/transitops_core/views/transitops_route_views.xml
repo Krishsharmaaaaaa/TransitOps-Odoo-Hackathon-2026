@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_transitops_route_tree" model="ir.ui.view">
+        <field name="name">transitops.route.tree</field>
+        <field name="model">transitops.route</field>
+        <field name="arch" type="xml">
+            <tree string="Routes" decoration-success="status == 'active'" decoration-warning="status == 'paused'" decoration-danger="status in ('inactive', 'completed')">
+                <field name="route_id"/>
+                <field name="route_name"/>
+                <field name="source"/>
+                <field name="destination"/>
+                <field name="route_type"/>
+                <field name="total_distance"/>
+                <field name="estimated_duration"/>
+                <field name="number_of_stops"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_route_form" model="ir.ui.view">
+        <field name="name">transitops.route.form</field>
+        <field name="model">transitops.route</field>
+        <field name="arch" type="xml">
+            <form string="Route">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="route_name" placeholder="Route Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="route_id"/>
+                            <field name="source"/>
+                            <field name="destination"/>
+                            <field name="route_type"/>
+                        </group>
+                        <group>
+                            <field name="total_distance"/>
+                            <field name="estimated_duration"/>
+                            <field name="number_of_stops"/>
+                            <field name="status"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="assigned_vehicle_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="assigned_driver_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Operational notes, route restrictions, or special instructions..."/>
+                        </page>
+                        <page string="Stops">
+                            <field name="stop_ids" mode="tree,form" context="{'default_route_id': active_id}">
+                                <tree editable="bottom">
+                                    <field name="stop_sequence"/>
+                                    <field name="stop_id"/>
+                                    <field name="stop_name"/>
+                                    <field name="status"/>
+                                    <field name="landmark"/>
+                                    <field name="expected_arrival_time"/>
+                                    <field name="expected_departure_time"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <field name="stop_id"/>
+                                            <field name="stop_name"/>
+                                            <field name="stop_sequence"/>
+                                            <field name="status"/>
+                                        </group>
+                                        <group>
+                                            <field name="latitude"/>
+                                            <field name="longitude"/>
+                                            <field name="landmark"/>
+                                        </group>
+                                        <group>
+                                            <field name="expected_arrival_time"/>
+                                            <field name="expected_departure_time"/>
+                                        </group>
+                                        <group>
+                                            <field name="notes"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_transitops_route_kanban" model="ir.ui.view">
+        <field name="name">transitops.route.kanban</field>
+        <field name="model">transitops.route</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="route_id"/>
+                <field name="route_name"/>
+                <field name="source"/>
+                <field name="destination"/>
+                <field name="route_type"/>
+                <field name="status"/>
+                <field name="number_of_stops"/>
+                <field name="total_distance"/>
+                <field name="estimated_duration"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record">
+                            <div class="o_kanban_details">
+                                <strong><field name="route_name"/></strong>
+                                <div><field name="route_id"/></div>
+                                <div><field name="source"/> → <field name="destination"/></div>
+                                <div><field name="route_type"/> · <field name="status"/></div>
+                                <div><field name="total_distance"/> km · <field name="estimated_duration"/> h</div>
+                                <div><field name="number_of_stops"/> stops</div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_transitops_route_search" model="ir.ui.view">
+        <field name="name">transitops.route.search</field>
+        <field name="model">transitops.route</field>
+        <field name="arch" type="xml">
+            <search string="Search Routes">
+                <field name="route_id"/>
+                <field name="route_name"/>
+                <field name="source"/>
+                <field name="destination"/>
+                <field name="route_type"/>
+                <field name="status"/>
+                <field name="assigned_vehicle_ids"/>
+                <field name="assigned_driver_ids"/>
+                <filter string="Draft" name="draft" domain="[('status', '=', 'draft')]"/>
+                <filter string="Active" name="active" domain="[('status', '=', 'active')]"/>
+                <filter string="Paused" name="paused" domain="[('status', '=', 'paused')]"/>
+                <filter string="Completed" name="completed" domain="[('status', '=', 'completed')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Route Type" name="group_route_type" context="{'group_by': 'route_type'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Source" name="group_source" context="{'group_by': 'source'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_transitops_route" model="ir.actions.act_window">
+        <field name="name">Routes</field>
+        <field name="res_model">transitops.route</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_transitops_route_search"/>
+    </record>
+</odoo>

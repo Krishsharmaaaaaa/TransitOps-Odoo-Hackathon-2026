@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_transitops_dashboard_tree" model="ir.ui.view">
+        <field name="name">transitops.dashboard.tree</field>
+        <field name="model">transitops.dashboard</field>
+        <field name="arch" type="xml">
+            <tree string="TransitOps Dashboard">
+                <field name="name"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_dashboard_form" model="ir.ui.view">
+        <field name="name">transitops.dashboard.form</field>
+        <field name="model">transitops.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="TransitOps Dashboard">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_transitops_dashboard_search" model="ir.ui.view">
+        <field name="name">transitops.dashboard.search</field>
+        <field name="model">transitops.dashboard</field>
+        <field name="arch" type="xml">
+            <search string="Search TransitOps Dashboard">
+                <field name="name"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="archived" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_transitops_dashboard" model="ir.actions.act_window">
+        <field name="name">TransitOps</field>
+        <field name="res_model">transitops.dashboard</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_transitops_dashboard_search"/>
+    </record>
+</odoo>

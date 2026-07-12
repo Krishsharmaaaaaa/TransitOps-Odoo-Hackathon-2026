@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_transitops_dashboard_user,access_transitops_dashboard_user,model_transitops_dashboard,base.group_user,1,1,1,1
+access_transitops_fleet_vehicle_user,access_transitops_fleet_vehicle_user,model_transitops_fleet_vehicle,base.group_user,1,1,1,1
+access_transitops_driver_user,access_transitops_driver_user,model_transitops_driver,base.group_user,1,1,1,1
+access_transitops_route_user,access_transitops_route_user,model_transitops_route,base.group_user,1,1,1,1
+access_transitops_stop_user,access_transitops_stop_user,model_transitops_stop,base.group_user,1,1,1,1
+access_transitops_trip_user,access_transitops_trip_user,model_transitops_trip,base.group_user,1,1,1,1

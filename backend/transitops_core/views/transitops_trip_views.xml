@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_transitops_trip_tree" model="ir.ui.view">
+        <field name="name">transitops.trip.tree</field>
+        <field name="model">transitops.trip</field>
+        <field name="arch" type="xml">
+            <tree string="Trips" decoration-success="current_status == 'completed'" decoration-warning="current_status in ('scheduled', 'delayed')" decoration-danger="current_status == 'cancelled'">
+                <field name="trip_id"/>
+                <field name="trip_name"/>
+                <field name="route_id"/>
+                <field name="assigned_vehicle_id"/>
+                <field name="assigned_driver_id"/>
+                <field name="trip_date"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
+                <field name="current_stop_id"/>
+                <field name="current_status"/>
+                <field name="eta"/>
+                <field name="passenger_count"/>
+                <field name="delay_minutes"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_trip_form" model="ir.ui.view">
+        <field name="name">transitops.trip.form</field>
+        <field name="model">transitops.trip</field>
+        <field name="arch" type="xml">
+            <form string="Trip">
+                <header>
+                    <button name="action_dispatch_trip" type="object" string="Dispatch Trip" class="btn-primary" invisible="current_status != 'scheduled'"/>
+                    <button name="action_complete_trip" type="object" string="Complete Trip" class="btn-success" invisible="current_status not in ('in_progress', 'delayed')"/>
+                    <button name="action_cancel_trip" type="object" string="Cancel Trip" class="btn-secondary" invisible="current_status in ('completed', 'cancelled')"/>
+                    <field name="current_status" widget="statusbar" statusbar_visible="scheduled,in_progress,delayed,completed,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="trip_name" placeholder="Trip Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="trip_id"/>
+                            <field name="route_id"/>
+                            <field name="assigned_vehicle_id"/>
+                            <field name="assigned_driver_id"/>
+                        </group>
+                        <group>
+                            <field name="trip_date"/>
+                            <field name="start_time"/>
+                            <field name="end_time"/>
+                            <field name="eta"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="current_stop_id" domain="[('route_id', '=', route_id)]"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="distance_covered"/>
+                            <field name="total_distance"/>
+                            <field name="delay_minutes"/>
+                            <field name="passenger_count"/>
+                            <field name="fuel_consumption"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="trip_notes" placeholder="Trip notes, incident details, or operational remarks..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_transitops_trip_kanban" model="ir.ui.view">
+        <field name="name">transitops.trip.kanban</field>
+        <field name="model">transitops.trip</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="trip_id"/>
+                <field name="trip_name"/>
+                <field name="route_id"/>
+                <field name="assigned_vehicle_id"/>
+                <field name="assigned_driver_id"/>
+                <field name="trip_date"/>
+                <field name="current_status"/>
+                <field name="current_stop_id"/>
+                <field name="eta"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record">
+                            <div class="o_kanban_details">
+                                <strong><field name="trip_name"/></strong>
+                                <div><field name="trip_id"/></div>
+                                <div><field name="route_id"/></div>
+                                <div><field name="assigned_vehicle_id"/> · <field name="assigned_driver_id"/></div>
+                                <div><field name="trip_date"/> · <field name="current_status"/></div>
+                                <div><field name="current_stop_id"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_transitops_trip_search" model="ir.ui.view">
+        <field name="name">transitops.trip.search</field>
+        <field name="model">transitops.trip</field>
+        <field name="arch" type="xml">
+            <search string="Search Trips">
+                <field name="trip_id"/>
+                <field name="trip_name"/>
+                <field name="route_id"/>
+                <field name="assigned_vehicle_id"/>
+                <field name="assigned_driver_id"/>
+                <field name="trip_date"/>
+                <field name="current_status"/>
+                <field name="current_stop_id"/>
+                <filter string="Scheduled" name="scheduled" domain="[('current_status', '=', 'scheduled')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('current_status', '=', 'in_progress')]"/>
+                <filter string="Delayed" name="delayed" domain="[('current_status', '=', 'delayed')]"/>
+                <filter string="Completed" name="completed" domain="[('current_status', '=', 'completed')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('current_status', '=', 'cancelled')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status" context="{'group_by': 'current_status'}"/>
+                    <filter string="Route" name="group_route" context="{'group_by': 'route_id'}"/>
+                    <filter string="Date" name="group_trip_date" context="{'group_by': 'trip_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_transitops_trip" model="ir.actions.act_window">
+        <field name="name">Trips</field>
+        <field name="res_model">transitops.trip</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_transitops_trip_search"/>
+    </record>
+
+    <record id="action_transitops_dispatch_board" model="ir.actions.act_window">
+        <field name="name">Dispatch Board</field>
+        <field name="res_model">transitops.trip</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('current_status', 'in', ('scheduled', 'in_progress', 'delayed'))]</field>
+        <field name="search_view_id" ref="view_transitops_trip_search"/>
+    </record>
+</odoo>
