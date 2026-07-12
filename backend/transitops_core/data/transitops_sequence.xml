@@ -14,4 +14,11 @@
         <field name="padding">5</field>
         <field name="company_id" eval="False"/>
     </record>
+    <record id="seq_transitops_notification" model="ir.sequence">
+        <field name="name">TransitOps Notification</field>
+        <field name="code">transitops.notification</field>
+        <field name="prefix">NTF/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
 </odoo>

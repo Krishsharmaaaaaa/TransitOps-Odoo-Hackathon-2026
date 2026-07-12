@@ -16,6 +16,7 @@ dispatch coordination, route planning, trip execution, and operational visibilit
     'depends': ['base', 'mail'],
     'data': [
         'data/transitops_sequence.xml',
+        'data/transitops_notification_cron.xml',
         'data/transitops_maintenance_cron.xml',
         'security/ir.model.access.csv',
         'data/transitops_data.xml',
@@ -26,6 +27,7 @@ dispatch coordination, route planning, trip execution, and operational visibilit
         'views/transitops_trip_views.xml',
         'views/transitops_incident_views.xml',
         'views/transitops_maintenance_views.xml',
+        'views/transitops_notification_views.xml',
         'views/transitops_dashboard_metric_views.xml',
         'views/transitops_reporting_views.xml',
         'views/transitops_dashboard_views.xml',

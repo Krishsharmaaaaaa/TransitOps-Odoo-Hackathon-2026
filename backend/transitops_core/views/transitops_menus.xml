@@ -9,6 +9,7 @@
     <menuitem id="menu_transitops_trips" name="Trips" parent="menu_transitops_operations" action="action_transitops_trip" sequence="18"/>
     <menuitem id="menu_transitops_incidents" name="Incidents" parent="menu_transitops_operations" action="action_transitops_incident" sequence="19"/>
     <menuitem id="menu_transitops_maintenance" name="Maintenance" parent="menu_transitops_operations" action="action_transitops_maintenance" sequence="20"/>
+    <menuitem id="menu_transitops_notifications" name="Notifications" parent="menu_transitops_operations" action="action_transitops_notification_history" sequence="22"/>
     <menuitem id="menu_transitops_reporting" name="Reporting" parent="menu_transitops_operations" sequence="25"/>
     <menuitem id="menu_transitops_reporting_hub" name="Reporting Hub" parent="menu_transitops_reporting" action="action_transitops_reporting_hub" sequence="5"/>
     <menuitem id="menu_transitops_reporting_fleet" name="Fleet Reports" parent="menu_transitops_reporting" action="action_transitops_fleet_report" sequence="10"/>

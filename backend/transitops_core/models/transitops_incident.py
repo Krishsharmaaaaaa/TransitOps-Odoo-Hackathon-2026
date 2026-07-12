@@ -92,12 +92,26 @@ class TransitOpsIncident(models.Model):
 
     def action_reported(self):
         self.write({'status': 'reported'})
+        for record in self:
+            record.env['transitops.notification'].notify_once(
+                'incident_reported',
+                record,
+                f'Incident {record.incident_number} has been reported.',
+                recipient=record.reporter_id,
+            )
 
     def action_investigating(self):
         self.write({'status': 'investigating'})
 
     def action_resolved(self):
         self.write({'status': 'resolved'})
+        for record in self:
+            record.env['transitops.notification'].notify_once(
+                'incident_resolved',
+                record,
+                f'Incident {record.incident_number} has been resolved.',
+                recipient=record.reporter_id,
+            )
 
     def action_closed(self):
         self.write({'status': 'closed', 'active': False})

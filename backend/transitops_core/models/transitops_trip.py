@@ -199,6 +199,12 @@ class TransitOpsTrip(models.Model):
             'availability': 'on_trip',
             'assigned_vehicle_id': self.assigned_vehicle_id.id,
         })
+        self.env['transitops.notification'].notify_once(
+            'trip_dispatch',
+            self,
+            f'Trip {self.trip_id} has been dispatched.',
+            recipient=self.create_uid,
+        )
 
     def _apply_completion(self):
         self.ensure_one()
@@ -217,6 +223,12 @@ class TransitOpsTrip(models.Model):
             'availability': 'available',
             'assigned_vehicle_id': False,
         })
+        self.env['transitops.notification'].notify_once(
+            'trip_completion',
+            self,
+            f'Trip {self.trip_id} has been completed.',
+            recipient=self.create_uid,
+        )
 
     def _apply_cancellation(self):
         self.ensure_one()
@@ -235,3 +247,9 @@ class TransitOpsTrip(models.Model):
                 'availability': 'available',
                 'assigned_vehicle_id': False,
             })
+        self.env['transitops.notification'].notify_once(
+            'trip_cancellation',
+            self,
+            f'Trip {self.trip_id} has been cancelled.',
+            recipient=self.create_uid,
+        )

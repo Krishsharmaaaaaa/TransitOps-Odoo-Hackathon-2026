@@ -51,6 +51,8 @@ class TransitOpsFleetVehicle(models.Model):
         tracking=True,
     )
     current_location = fields.Char(tracking=True)
+    registration_expiry = fields.Date(tracking=True)
+    insurance_expiry = fields.Date(tracking=True)
     assigned_driver_id = fields.Many2one(
         comodel_name='transitops.driver',
         string='Assigned Driver',
@@ -246,4 +248,15 @@ class TransitOpsFleetVehicle(models.Model):
             'view_mode': 'tree,kanban,form,calendar,pivot,graph',
             'domain': [('vehicle_id', '=', self.id)],
             'context': {'default_vehicle_id': self.id},
+        }
+
+    def action_view_notifications(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Notifications',
+            'res_model': 'transitops.notification',
+            'view_mode': 'tree,form,graph,pivot,calendar',
+            'domain': [('source_model', '=', self._name), ('source_res_id', '=', self.id)],
+            'context': {'default_source_model': self._name, 'default_source_res_id': self.id},
         }

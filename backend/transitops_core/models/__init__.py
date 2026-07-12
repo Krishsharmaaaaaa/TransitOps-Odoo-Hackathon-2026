@@ -7,3 +7,4 @@ from . import transitops_trip
 from . import transitops_incident
 from . import transitops_maintenance
 from . import transitops_dashboard_metric
+from . import transitops_notification

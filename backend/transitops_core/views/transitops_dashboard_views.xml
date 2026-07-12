@@ -22,6 +22,7 @@
                     <button name="action_open_metric_lines" type="object" string="Metrics"/>
                     <button name="action_open_metric_graph" type="object" string="Graph"/>
                     <button name="action_open_metric_pivot" type="object" string="Pivot"/>
+                    <button name="%(action_transitops_notification_history)d" type="action" string="Notifications" class="btn-secondary"/>
                     <button name="%(action_transitops_reporting_hub)d" type="action" string="Reports" class="btn-secondary"/>
                 </header>
                 <sheet>

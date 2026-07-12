@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_transitops_notification_tree" model="ir.ui.view">
+        <field name="name">transitops.notification.tree</field>
+        <field name="model">transitops.notification</field>
+        <field name="arch" type="xml">
+            <tree string="Notifications" export_xlsx="1" decoration-success="state == 'acknowledged'">
+                <field name="notification_number"/>
+                <field name="notification_date"/>
+                <field name="notification_type"/>
+                <field name="source_model"/>
+                <field name="source_name"/>
+                <field name="recipient_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_notification_form" model="ir.ui.view">
+        <field name="name">transitops.notification.form</field>
+        <field name="model">transitops.notification</field>
+        <field name="arch" type="xml">
+            <form string="Notification History">
+                <header>
+                    <button name="action_acknowledge" type="object" string="Acknowledge" class="btn-primary" invisible="state == 'acknowledged'"/>
+                    <button name="action_open_source" type="object" string="Open Source Record"/>
+                    <field name="state" widget="statusbar" statusbar_visible="sent,acknowledged"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="notification_number" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="notification_type"/>
+                            <field name="notification_date"/>
+                            <field name="recipient_id"/>
+                        </group>
+                        <group>
+                            <field name="source_model"/>
+                            <field name="source_res_id"/>
+                            <field name="source_name"/>
+                            <field name="notification_key"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="message"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_transitops_notification_search" model="ir.ui.view">
+        <field name="name">transitops.notification.search</field>
+        <field name="model">transitops.notification</field>
+        <field name="arch" type="xml">
+            <search string="Search Notifications">
+                <field name="notification_number"/>
+                <field name="notification_type"/>
+                <field name="source_model"/>
+                <field name="source_name"/>
+                <field name="recipient_id"/>
+                <field name="state"/>
+                <filter string="Sent" name="sent" domain="[('state', '=', 'sent')]"/>
+                <filter string="Acknowledged" name="acknowledged" domain="[('state', '=', 'acknowledged')]"/>
+                <filter string="Trips" name="trips" domain="[('notification_type', 'in', ('trip_dispatch', 'trip_completion', 'trip_cancellation'))]"/>
+                <filter string="Maintenance" name="maintenance" domain="[('notification_type', 'in', ('upcoming_maintenance', 'vehicle_overdue_maintenance'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_type" context="{'group_by': 'notification_type'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Source Model" name="group_source" context="{'group_by': 'source_model'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_transitops_notification_calendar" model="ir.ui.view">
+        <field name="name">transitops.notification.calendar</field>
+        <field name="model">transitops.notification</field>
+        <field name="arch" type="xml">
+            <calendar string="Notification Timeline" date_start="notification_date" color="notification_type">
+                <field name="notification_number"/>
+                <field name="notification_type"/>
+                <field name="source_name"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_transitops_notification_graph" model="ir.ui.view">
+        <field name="name">transitops.notification.graph</field>
+        <field name="model">transitops.notification</field>
+        <field name="arch" type="xml">
+            <graph string="Notification Volume" type="bar">
+                <field name="notification_date" type="row" interval="month"/>
+                <field name="notification_type" type="col"/>
+                <field name="notification_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_transitops_notification_pivot" model="ir.ui.view">
+        <field name="name">transitops.notification.pivot</field>
+        <field name="model">transitops.notification</field>
+        <field name="arch" type="xml">
+            <pivot string="Notification Analysis">
+                <field name="notification_type" type="row"/>
+                <field name="state" type="col"/>
+                <field name="notification_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_transitops_notification_history" model="ir.actions.act_window">
+        <field name="name">Notifications</field>
+        <field name="res_model">transitops.notification</field>
+        <field name="view_mode">tree,form,graph,pivot,calendar</field>
+        <field name="search_view_id" ref="view_transitops_notification_search"/>
+        <field name="context">{'search_default_sent': 1}</field>
+    </record>
+</odoo>
