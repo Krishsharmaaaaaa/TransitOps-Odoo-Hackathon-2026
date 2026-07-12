@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_transitops_maintenance_tree" model="ir.ui.view">
+        <field name="name">transitops.maintenance.tree</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <tree string="Maintenance" decoration-success="status == 'completed'" decoration-warning="status in ('scheduled', 'in_progress')" decoration-danger="status == 'cancelled'">
+                <field name="maintenance_id"/>
+                <field name="vehicle_id"/>
+                <field name="maintenance_type"/>
+                <field name="workshop_id"/>
+                <field name="vendor_id"/>
+                <field name="assigned_mechanic_id"/>
+                <field name="service_date"/>
+                <field name="expected_completion"/>
+                <field name="completion_date"/>
+                <field name="estimated_cost"/>
+                <field name="actual_cost"/>
+                <field name="odometer_reading"/>
+                <field name="next_due_date"/>
+                <field name="vehicle_health_score"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_maintenance_form" model="ir.ui.view">
+        <field name="name">transitops.maintenance.form</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <form string="Maintenance">
+                <header>
+                    <button name="action_set_draft" type="object" string="Reset to Draft" invisible="status == 'draft'"/>
+                    <button name="action_schedule_maintenance" type="object" string="Schedule" class="btn-primary" invisible="status != 'draft'"/>
+                    <button name="action_start_maintenance" type="object" string="Start" class="btn-primary" invisible="status != 'scheduled'"/>
+                    <button name="action_complete_maintenance" type="object" string="Complete" class="btn-success" invisible="status != 'in_progress'"/>
+                    <button name="action_cancel_maintenance" type="object" string="Cancel" class="btn-secondary" invisible="status == 'completed' or status == 'cancelled'"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,scheduled,in_progress,completed,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_vehicle" class="oe_stat_button" icon="fa-truck">
+                            <field name="vehicle_id" invisible="1"/>
+                            <span>Vehicle</span>
+                        </button>
+                        <button type="object" name="action_start_maintenance" class="oe_stat_button" icon="fa-wrench">
+                            <field name="maintenance_id" invisible="1"/>
+                            <span>Service</span>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="maintenance_id" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="vehicle_id"/>
+                            <field name="maintenance_type"/>
+                            <field name="workshop_id"/>
+                            <field name="vendor_id"/>
+                            <field name="assigned_mechanic_id"/>
+                            <field name="service_date"/>
+                            <field name="expected_completion"/>
+                        </group>
+                        <group>
+                            <field name="completion_date"/>
+                            <field name="estimated_cost"/>
+                            <field name="actual_cost"/>
+                            <field name="odometer_reading"/>
+                            <field name="next_due_date"/>
+                            <field name="vehicle_health_score"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_transitops_maintenance_kanban" model="ir.ui.view">
+        <field name="name">transitops.maintenance.kanban</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="maintenance_id"/>
+                <field name="vehicle_id"/>
+                <field name="maintenance_type"/>
+                <field name="assigned_mechanic_id"/>
+                <field name="service_date"/>
+                <field name="next_due_date"/>
+                <field name="vehicle_health_score"/>
+                <field name="status"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record">
+                            <div class="o_kanban_details">
+                                <strong><field name="maintenance_id"/></strong>
+                                <div><field name="vehicle_id"/></div>
+                                <div><field name="maintenance_type"/> · <field name="status"/></div>
+                                <div><field name="assigned_mechanic_id"/></div>
+                                <div><field name="service_date"/> · <field name="next_due_date"/></div>
+                                <div>Health: <field name="vehicle_health_score"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_transitops_maintenance_search" model="ir.ui.view">
+        <field name="name">transitops.maintenance.search</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <search string="Search Maintenance">
+                <field name="maintenance_id"/>
+                <field name="vehicle_id"/>
+                <field name="maintenance_type"/>
+                <field name="assigned_mechanic_id"/>
+                <field name="service_date"/>
+                <field name="status"/>
+                <filter string="Scheduled" name="scheduled" domain="[('status', '=', 'scheduled')]"/>
+                <filter string="In Progress" name="in_progress" domain="[('status', '=', 'in_progress')]"/>
+                <filter string="Completed" name="completed" domain="[('status', '=', 'completed')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('status', '=', 'cancelled')]"/>
+                <filter string="Preventive" name="preventive" domain="[('maintenance_type', '=', 'preventive')]"/>
+                <filter string="Corrective" name="corrective" domain="[('maintenance_type', '=', 'corrective')]"/>
+                <filter string="Emergency" name="emergency" domain="[('maintenance_type', '=', 'emergency')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Vehicle" name="group_vehicle" context="{'group_by': 'vehicle_id'}"/>
+                    <filter string="Type" name="group_type" context="{'group_by': 'maintenance_type'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_transitops_maintenance_calendar" model="ir.ui.view">
+        <field name="name">transitops.maintenance.calendar</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <calendar string="Maintenance Timeline" date_start="service_date" color="status" mode="month">
+                <field name="maintenance_id"/>
+                <field name="vehicle_id"/>
+                <field name="maintenance_type"/>
+                <field name="workshop_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_transitops_maintenance_pivot" model="ir.ui.view">
+        <field name="name">transitops.maintenance.pivot</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <pivot string="Maintenance Analysis">
+                <field name="maintenance_type" type="row"/>
+                <field name="status" type="col"/>
+                <field name="actual_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_transitops_maintenance_graph" model="ir.ui.view">
+        <field name="name">transitops.maintenance.graph</field>
+        <field name="model">transitops.maintenance</field>
+        <field name="arch" type="xml">
+            <graph string="Maintenance Cost Trends" type="bar">
+                <field name="maintenance_type" type="row"/>
+                <field name="actual_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_transitops_maintenance" model="ir.actions.act_window">
+        <field name="name">Maintenance</field>
+        <field name="res_model">transitops.maintenance</field>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+        <field name="search_view_id" ref="view_transitops_maintenance_search"/>
+        <field name="context">{'search_default_scheduled': 1}</field>
+    </record>
+</odoo>

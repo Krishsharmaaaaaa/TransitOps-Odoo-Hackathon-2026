@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_transitops_incident_tree" model="ir.ui.view">
+        <field name="name">transitops.incident.tree</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <tree string="Incidents" decoration-danger="severity in ('high', 'critical')" decoration-warning="status in ('reported', 'investigating')" decoration-success="status in ('resolved', 'closed')">
+                <field name="incident_number"/>
+                <field name="title"/>
+                <field name="date"/>
+                <field name="category"/>
+                <field name="severity"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="trip_id"/>
+                <field name="reporter_id"/>
+                <field name="status"/>
+                <field name="cost"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_incident_form" model="ir.ui.view">
+        <field name="name">transitops.incident.form</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <form string="Incident">
+                <header>
+                    <button name="action_set_draft" type="object" string="Set to Draft" invisible="status != 'reported' and status != 'investigating' and status != 'resolved'"/>
+                    <button name="action_reported" type="object" string="Report" class="btn-primary" invisible="status != 'draft'"/>
+                    <button name="action_investigating" type="object" string="Investigate" class="btn-secondary" invisible="status != 'reported'"/>
+                    <button name="action_resolved" type="object" string="Resolve" class="btn-success" invisible="status != 'investigating'"/>
+                    <button name="action_closed" type="object" string="Close" class="btn-danger" invisible="status != 'resolved'"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,reported,investigating,resolved,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_reported" class="oe_stat_button" icon="fa-exclamation-triangle" invisible="1">
+                            <field name="incident_number" invisible="1"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="title" placeholder="Incident Title"/></h1>
+                        <h2><field name="incident_number" readonly="1"/></h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="vehicle_id"/>
+                            <field name="driver_id"/>
+                            <field name="trip_id"/>
+                            <field name="reporter_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="severity"/>
+                            <field name="category"/>
+                            <field name="cost"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                        <field name="root_cause"/>
+                        <field name="resolution"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_transitops_incident_kanban" model="ir.ui.view">
+        <field name="name">transitops.incident.kanban</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="incident_number"/>
+                <field name="title"/>
+                <field name="date"/>
+                <field name="category"/>
+                <field name="severity"/>
+                <field name="status"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record">
+                            <div class="o_kanban_details">
+                                <strong><field name="title"/></strong>
+                                <div><field name="incident_number"/></div>
+                                <div><field name="category"/> · <field name="severity"/></div>
+                                <div><field name="vehicle_id"/> · <field name="driver_id"/></div>
+                                <div><field name="status"/> · <field name="date"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_transitops_incident_search" model="ir.ui.view">
+        <field name="name">transitops.incident.search</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <search string="Search Incidents">
+                <field name="incident_number"/>
+                <field name="title"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="trip_id"/>
+                <field name="reporter_id"/>
+                <field name="severity"/>
+                <field name="category"/>
+                <field name="status"/>
+                <filter string="Draft" name="draft" domain="[('status', '=', 'draft')]"/>
+                <filter string="Reported" name="reported" domain="[('status', '=', 'reported')]"/>
+                <filter string="Investigating" name="investigating" domain="[('status', '=', 'investigating')]"/>
+                <filter string="Resolved" name="resolved" domain="[('status', '=', 'resolved')]"/>
+                <filter string="Closed" name="closed" domain="[('status', '=', 'closed')]"/>
+                <filter string="Critical" name="critical" domain="[('severity', '=', 'critical')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Severity" name="group_severity" context="{'group_by': 'severity'}"/>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_transitops_incident_calendar" model="ir.ui.view">
+        <field name="name">transitops.incident.calendar</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <calendar string="Incident Timeline" date_start="date" color="severity" mode="month">
+                <field name="title"/>
+                <field name="vehicle_id"/>
+                <field name="status"/>
+                <field name="severity"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_transitops_incident_pivot" model="ir.ui.view">
+        <field name="name">transitops.incident.pivot</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <pivot string="Incident Analysis">
+                <field name="severity" type="row"/>
+                <field name="category" type="col"/>
+                <field name="cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_transitops_incident_graph" model="ir.ui.view">
+        <field name="name">transitops.incident.graph</field>
+        <field name="model">transitops.incident</field>
+        <field name="arch" type="xml">
+            <graph string="Incident Trends" type="bar">
+                <field name="category" type="row"/>
+                <field name="cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_transitops_incident" model="ir.actions.act_window">
+        <field name="name">Incidents</field>
+        <field name="res_model">transitops.incident</field>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph</field>
+        <field name="search_view_id" ref="view_transitops_incident_search"/>
+        <field name="context">{'search_default_reported': 1}</field>
+    </record>
+</odoo>

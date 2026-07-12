@@ -5,3 +5,5 @@ access_transitops_driver_user,access_transitops_driver_user,model_transitops_dri
 access_transitops_route_user,access_transitops_route_user,model_transitops_route,base.group_user,1,1,1,1
 access_transitops_stop_user,access_transitops_stop_user,model_transitops_stop,base.group_user,1,1,1,1
 access_transitops_trip_user,access_transitops_trip_user,model_transitops_trip,base.group_user,1,1,1,1
+access_transitops_incident_user,access_transitops_incident_user,model_transitops_incident,base.group_user,1,1,1,1
+access_transitops_maintenance_user,access_transitops_maintenance_user,model_transitops_maintenance,base.group_user,1,1,1,1

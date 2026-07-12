@@ -4,3 +4,5 @@ from . import transitops_driver
 from . import transitops_route
 from . import transitops_stop
 from . import transitops_trip
+from . import transitops_incident
+from . import transitops_maintenance

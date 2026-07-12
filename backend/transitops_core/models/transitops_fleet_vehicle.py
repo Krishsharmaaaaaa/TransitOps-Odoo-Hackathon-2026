@@ -1,3 +1,5 @@
+from datetime import date
+
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -55,6 +57,20 @@ class TransitOpsFleetVehicle(models.Model):
         tracking=True,
         ondelete='set null',
     )
+    incident_ids = fields.One2many(
+        comodel_name='transitops.incident',
+        inverse_name='vehicle_id',
+        string='Incidents',
+    )
+    incident_count = fields.Integer(compute='_compute_incident_count', string='Incidents')
+    maintenance_ids = fields.One2many(
+        comodel_name='transitops.maintenance',
+        inverse_name='vehicle_id',
+        string='Maintenance Records',
+    )
+    maintenance_count = fields.Integer(compute='_compute_maintenance_count', string='Maintenance')
+    maintenance_health_score = fields.Float(compute='_compute_maintenance_metrics', string='Vehicle Health Score', readonly=True, store=True)
+    next_maintenance_date = fields.Date(compute='_compute_maintenance_metrics', string='Next Maintenance Date', readonly=True, store=True)
     odometer = fields.Float(required=True, default=0.0, tracking=True)
     maintenance_status = fields.Selection(
         selection=[
@@ -125,3 +141,109 @@ class TransitOpsFleetVehicle(models.Model):
     def _onchange_assigned_driver_id(self):
         if self.assigned_driver_id and self.assigned_driver_id.assigned_vehicle_id and self.assigned_driver_id.assigned_vehicle_id != self:
             self.assigned_driver_id = False
+
+    def _compute_incident_count(self):
+        incident_data = self.env['transitops.incident'].read_group(
+            [('vehicle_id', 'in', self.ids)],
+            ['vehicle_id'],
+            ['vehicle_id'],
+        )
+        mapped_data = {item['vehicle_id'][0]: item['vehicle_id_count'] for item in incident_data}
+        for record in self:
+            record.incident_count = mapped_data.get(record.id, 0)
+
+    def _compute_maintenance_count(self):
+        maintenance_data = self.env['transitops.maintenance'].read_group(
+            [('vehicle_id', 'in', self.ids)],
+            ['vehicle_id'],
+            ['vehicle_id'],
+        )
+        mapped_data = {item['vehicle_id'][0]: item['vehicle_id_count'] for item in maintenance_data}
+        for record in self:
+            record.maintenance_count = mapped_data.get(record.id, 0)
+
+    @api.depends(
+        'maintenance_ids.status',
+        'maintenance_ids.next_due_date',
+        'maintenance_ids.service_date',
+        'maintenance_ids.completion_date',
+        'maintenance_ids.maintenance_type',
+    )
+    def _compute_maintenance_metrics(self):
+        today = fields.Date.context_today(self)
+        for record in self:
+            maintenance_records = record.maintenance_ids.sorted(
+                key=lambda maintenance: (
+                    maintenance.next_due_date or date(9999, 12, 31),
+                    maintenance.service_date or date(9999, 12, 31),
+                    maintenance.id,
+                )
+            )
+            open_records = maintenance_records.filtered(lambda maintenance: maintenance.status in ('draft', 'scheduled', 'in_progress'))
+            completed_records = maintenance_records.filtered(lambda maintenance: maintenance.status == 'completed')
+
+            next_due = False
+            if open_records:
+                next_due = open_records[0].next_due_date or open_records[0].service_date
+            elif maintenance_records:
+                future_records = maintenance_records.filtered(lambda maintenance: maintenance.next_due_date)
+                if future_records:
+                    next_due = future_records[0].next_due_date
+                else:
+                    next_due = maintenance_records[0].service_date
+
+            score = 100.0
+            if not maintenance_records:
+                score = 100.0
+            elif open_records:
+                latest_open = open_records[0]
+                if latest_open.status == 'in_progress':
+                    score = 75.0
+                elif latest_open.next_due_date and latest_open.next_due_date < today:
+                    overdue_days = (today - latest_open.next_due_date).days
+                    score = max(25.0, 60.0 - (overdue_days * 2))
+                elif latest_open.next_due_date and latest_open.next_due_date <= today.replace(day=today.day):
+                    score = 80.0
+                else:
+                    score = 90.0
+            elif completed_records:
+                latest_completed = completed_records.sorted(
+                    key=lambda maintenance: (
+                        maintenance.completion_date or maintenance.service_date or date(1, 1, 1),
+                        maintenance.id,
+                    )
+                )[-1]
+                if latest_completed.completion_date:
+                    completion_date = fields.Datetime.to_datetime(latest_completed.completion_date).date()
+                    days_since_completion = (today - completion_date).days
+                    if days_since_completion <= 30:
+                        score = 98.0
+                    elif days_since_completion <= 90:
+                        score = 92.0
+                    else:
+                        score = 86.0
+
+            record.maintenance_health_score = max(0.0, min(100.0, score))
+            record.next_maintenance_date = next_due
+
+    def action_view_incidents(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Incidents',
+            'res_model': 'transitops.incident',
+            'view_mode': 'tree,kanban,form,calendar,pivot,graph',
+            'domain': [('vehicle_id', '=', self.id)],
+            'context': {'default_vehicle_id': self.id},
+        }
+
+    def action_view_maintenance(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Maintenance',
+            'res_model': 'transitops.maintenance',
+            'view_mode': 'tree,kanban,form,calendar,pivot,graph',
+            'domain': [('vehicle_id', '=', self.id)],
+            'context': {'default_vehicle_id': self.id},
+        }
