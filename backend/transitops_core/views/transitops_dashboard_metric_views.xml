@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_transitops_dashboard_metric_tree" model="ir.ui.view">
+        <field name="name">transitops.dashboard.metric.tree</field>
+        <field name="model">transitops.dashboard.metric</field>
+        <field name="arch" type="xml">
+            <tree string="Dashboard Metrics">
+                <field name="dashboard_id"/>
+                <field name="metric_group"/>
+                <field name="metric_name"/>
+                <field name="metric_value"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transitops_dashboard_metric_form" model="ir.ui.view">
+        <field name="name">transitops.dashboard.metric.form</field>
+        <field name="model">transitops.dashboard.metric</field>
+        <field name="arch" type="xml">
+            <form string="Dashboard Metric">
+                <sheet>
+                    <group>
+                        <field name="dashboard_id"/>
+                        <field name="metric_group"/>
+                        <field name="metric_name"/>
+                        <field name="metric_key"/>
+                        <field name="metric_value"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_transitops_dashboard_metric_search" model="ir.ui.view">
+        <field name="name">transitops.dashboard.metric.search</field>
+        <field name="model">transitops.dashboard.metric</field>
+        <field name="arch" type="xml">
+            <search string="Search Dashboard Metrics">
+                <field name="metric_group"/>
+                <field name="metric_name"/>
+                <field name="metric_value"/>
+                <group expand="0" string="Group By">
+                    <filter string="Group" name="group_metric_group" context="{'group_by': 'metric_group'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_transitops_dashboard_metric_graph" model="ir.ui.view">
+        <field name="name">transitops.dashboard.metric.graph</field>
+        <field name="model">transitops.dashboard.metric</field>
+        <field name="arch" type="xml">
+            <graph string="Executive Metrics" type="bar">
+                <field name="metric_name" type="row"/>
+                <field name="metric_value" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_transitops_dashboard_metric_pivot" model="ir.ui.view">
+        <field name="name">transitops.dashboard.metric.pivot</field>
+        <field name="model">transitops.dashboard.metric</field>
+        <field name="arch" type="xml">
+            <pivot string="Executive Metrics Pivot">
+                <field name="metric_group" type="row"/>
+                <field name="metric_name" type="col"/>
+                <field name="metric_value" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+</odoo>

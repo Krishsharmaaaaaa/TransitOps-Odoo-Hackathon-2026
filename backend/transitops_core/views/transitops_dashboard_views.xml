@@ -4,8 +4,9 @@
         <field name="name">transitops.dashboard.tree</field>
         <field name="model">transitops.dashboard</field>
         <field name="arch" type="xml">
-            <tree string="TransitOps Dashboard">
+            <tree string="TransitOps Executive Dashboard">
                 <field name="name"/>
+                <field name="last_refreshed_on"/>
                 <field name="active"/>
             </tree>
         </field>
@@ -15,12 +16,63 @@
         <field name="name">transitops.dashboard.form</field>
         <field name="model">transitops.dashboard</field>
         <field name="arch" type="xml">
-            <form string="TransitOps Dashboard">
+            <form string="TransitOps Executive Dashboard">
+                <header>
+                    <button name="action_refresh_dashboard" type="object" string="Refresh KPIs" class="btn-primary"/>
+                    <button name="action_open_metric_lines" type="object" string="Metrics"/>
+                    <button name="action_open_metric_graph" type="object" string="Graph"/>
+                    <button name="action_open_metric_pivot" type="object" string="Pivot"/>
+                </header>
                 <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
                     <group>
-                        <field name="name"/>
+                        <field name="last_refreshed_on" readonly="1"/>
                         <field name="active"/>
                     </group>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_refresh_dashboard" class="oe_stat_button" icon="fa-refresh">
+                            <field name="last_refreshed_on" invisible="1"/>
+                            <span>Refresh</span>
+                        </button>
+                    </div>
+                    <group string="Fleet KPIs">
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="total_vehicles" widget="statinfo" string="Total Vehicles"/></button>
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="available_vehicles" widget="statinfo" string="Available Vehicles"/></button>
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="vehicles_on_trip" widget="statinfo" string="Vehicles On Trip"/></button>
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="vehicles_under_maintenance" widget="statinfo" string="Under Maintenance"/></button>
+                    </group>
+                    <group string="Driver KPIs">
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="total_drivers" widget="statinfo" string="Total Drivers"/></button>
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="available_drivers" widget="statinfo" string="Available Drivers"/></button>
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="drivers_on_trip" widget="statinfo" string="Drivers On Trip"/></button>
+                    </group>
+                    <group string="Trip KPIs">
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="active_trips" widget="statinfo" string="Active Trips"/></button>
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="completed_trips" widget="statinfo" string="Completed Trips"/></button>
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="cancelled_trips" widget="statinfo" string="Cancelled Trips"/></button>
+                    </group>
+                    <group string="Incident KPIs">
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="open_incidents" widget="statinfo" string="Open Incidents"/></button>
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="resolved_incidents" widget="statinfo" string="Resolved Incidents"/></button>
+                    </group>
+                    <group string="Maintenance KPIs">
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="scheduled_maintenance" widget="statinfo" string="Scheduled Maintenance"/></button>
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="in_progress_maintenance" widget="statinfo" string="In Progress"/></button>
+                        <button type="object" name="action_open_metric_lines" class="oe_stat_button"><field name="completed_maintenance" widget="statinfo" string="Completed"/></button>
+                    </group>
+                    <notebook>
+                        <page string="Metrics">
+                            <field name="metric_line_ids" mode="tree,kanban,form" context="{'default_dashboard_id': active_id}">
+                                <tree>
+                                    <field name="metric_group"/>
+                                    <field name="metric_name"/>
+                                    <field name="metric_value"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -39,9 +91,10 @@
     </record>
 
     <record id="action_transitops_dashboard" model="ir.actions.act_window">
-        <field name="name">TransitOps</field>
+        <field name="name">Executive Dashboard</field>
         <field name="res_model">transitops.dashboard</field>
-        <field name="view_mode">tree,form</field>
+        <field name="res_id" ref="transitops_dashboard_main"/>
+        <field name="view_mode">form</field>
         <field name="search_view_id" ref="view_transitops_dashboard_search"/>
     </record>
 </odoo>
